@@ -90,16 +90,16 @@ void lv_demo_high_res_home(lv_obj_t * base_obj)
     lv_obj_t * date = lv_spangroup_create(date_and_time);
     lv_obj_add_style(date, &c->fonts[FONT_HEADING_MD], 0);
     lv_obj_add_style(date, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_spangroup_add_span(date);
-    lv_span_t * day_and_month = lv_spangroup_add_span(date);
+    lv_spangroup_new_span(date);
+    lv_span_t * day_and_month = lv_spangroup_new_span(date);
     lv_subject_add_observer_obj(&c->th, theme_observer_accent_span_cb, date, day_and_month);
     lv_subject_add_observer_obj(&c->subject_groups.date.group, date_observer_cb, date, c);
 
     lv_obj_t * time = lv_spangroup_create(date_and_time);
     lv_obj_add_style(time, &c->fonts[FONT_HEADING_XXL], 0);
     lv_obj_add_style(time, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_spangroup_add_span(time);
-    lv_span_t * minute = lv_spangroup_add_span(time);
+    lv_spangroup_new_span(time);
+    lv_span_t * minute = lv_spangroup_new_span(time);
     lv_subject_add_observer_obj(&c->th, theme_observer_accent_span_cb, time, minute);
     lv_subject_add_observer_obj(&c->subject_groups.time.group, time_observer_cb, time, c);
 
@@ -219,7 +219,7 @@ static void theme_observer_accent_span_cb(lv_observer_t * observer, lv_subject_t
     lv_span_t * span = lv_observer_get_user_data(observer);
     const lv_demo_high_res_theme_t * th = lv_subject_get_pointer(subject);
 
-    lv_style_set_text_color(&span->style, th->accent);
+    lv_style_set_text_color(lv_span_get_style(span), th->accent);
 }
 
 static void app_card_click_cb(lv_event_t * e)
@@ -306,7 +306,7 @@ static void time_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
     lv_snprintf(buf, sizeof(buf), ":%02"LV_PRId32, lv_subject_get_int(&c->api.subjects.minute));
     lv_span_set_text(lv_spangroup_get_child(spangroup, 1), buf);
 
-    lv_spangroup_refresh(spangroup);
+    lv_spangroup_refr_mode(spangroup);
 }
 
 static void date_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
@@ -323,7 +323,7 @@ static void date_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
                 lv_subject_get_pointer(&c->api.subjects.month_name));
     lv_span_set_text(lv_spangroup_get_child(spangroup, 1), buf);
 
-    lv_spangroup_refresh(spangroup);
+    lv_spangroup_refr_mode(spangroup);
 }
 
 static void hi_lo_observer_cb(lv_observer_t * observer, lv_subject_t * subject)

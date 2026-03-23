@@ -37,6 +37,10 @@
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
+void lv_demo_high_res_test(void)
+{
+    lv_demo_high_res_api_example("A:assets", "A:assets/img_lv_demo_high_res_lvgl_logo.png", "A:about_app_slides");
+}
 
 lv_demo_high_res_api_t * lv_demo_high_res(const char * assets_path,
                                           const char * logo_path,

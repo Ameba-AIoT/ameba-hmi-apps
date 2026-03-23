@@ -215,7 +215,7 @@ static void wifi_ssid_ip_observer_cb(lv_observer_t * observer, lv_subject_t * su
     lv_obj_t * spangroup = lv_observer_get_target_obj(observer);
     lv_span_t * span = lv_observer_get_user_data(observer);
     const char * ssid_ip_value = lv_subject_get_pointer(subject);
-    lv_spangroup_set_span_text(spangroup, span, ssid_ip_value ? ssid_ip_value : "(offline)");
+    lv_span_set_text(span, ssid_ip_value ? ssid_ip_value : "(offline)");
 }
 
 static void wifi_button_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
@@ -380,17 +380,17 @@ static lv_obj_t * create_wifi(lv_obj_t * parent, lv_demo_high_res_ctx_t * c)
     lv_obj_t * ssid = lv_spangroup_create(cont);
     lv_obj_add_style(ssid, &c->fonts[FONT_LABEL_XS], 0);
     lv_obj_add_style(ssid, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_span_set_text_static(lv_spangroup_add_span(ssid), "SSID: ");
-    lv_span_t * ssid_value = lv_spangroup_add_span(ssid);
-    lv_style_set_text_opa(&ssid_value->style, LV_OPA_40);
+    lv_span_set_text_static(lv_spangroup_new_span(ssid), "SSID: ");
+    lv_span_t * ssid_value = lv_spangroup_new_span(ssid);
+    lv_style_set_text_opa(lv_span_get_style(ssid_value), LV_OPA_40);
     lv_subject_add_observer_obj(&c->api.subjects.wifi_ssid, wifi_ssid_ip_observer_cb, ssid, ssid_value);
 
     lv_obj_t * ip = lv_spangroup_create(cont);
     lv_obj_add_style(ip, &c->fonts[FONT_LABEL_XS], 0);
     lv_obj_add_style(ip, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_span_set_text_static(lv_spangroup_add_span(ip), "IP Address: ");
-    lv_span_t * ip_value = lv_spangroup_add_span(ip);
-    lv_style_set_text_opa(&ip_value->style, LV_OPA_40);
+    lv_span_set_text_static(lv_spangroup_new_span(ip), "IP Address: ");
+    lv_span_t * ip_value = lv_spangroup_new_span(ip);
+    lv_style_set_text_opa(lv_span_get_style(ip_value), LV_OPA_40);
     lv_subject_add_observer_obj(&c->api.subjects.wifi_ip, wifi_ssid_ip_observer_cb, ip, ip_value);
 
     lv_obj_t * btn = lv_label_create(cont);

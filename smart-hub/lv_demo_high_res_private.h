@@ -135,6 +135,7 @@ enum {
 
 enum {
     SIZE_SM = 0,
+    SIZE_MSM,
     SIZE_MD,
     SIZE_LG,
     SIZE_COUNT

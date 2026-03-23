@@ -90,6 +90,7 @@ typedef struct {
 
 typedef void (*lv_demo_high_res_exit_cb_t)(lv_demo_high_res_api_t * api);
 
+void lv_demo_high_res_test(void);
 /**********************
  * GLOBAL PROTOTYPES
  **********************/

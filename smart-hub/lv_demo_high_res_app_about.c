@@ -98,8 +98,13 @@ void lv_demo_high_res_app_about(lv_obj_t * base_obj)
     if(lv_array_is_empty(&c->about_slides_array)) {
         lv_obj_t * label = lv_label_create(bg_cont);
         if(c->about_slides_dir_exists) {
-            lv_label_set_text_fmt(label, "Couldn't find images named Slide1.png, Slide2.png, etc. in the '%s' folder",
-                                  c->slides_path);
+            static lv_style_t style;
+            lv_style_init(&style);
+            lv_style_set_text_line_space(&style, 8);
+            lv_obj_add_style(label, &style, 0);
+            lv_obj_add_style(label, &c->fonts[FONT_LABEL_MD], 0);
+            lv_label_set_text(label,
+                        "\nLVGL is the most popular free and open-source embedded graphics \nlibrary to create beautiful Uls for any MCU, MPU and display type.\n \nFrom consumer electronics to industrial automation, any application \ncan leverage LVGLs 30+ built-in widgets, 100+ style properties, web- \ninspired layouts, and typography system supporting many languages.");
         }
         else {
             lv_label_set_text_fmt(label, "Couldn't open the '%s' folder to load the images", c->slides_path);

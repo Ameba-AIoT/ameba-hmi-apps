@@ -51,11 +51,21 @@ LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_bold_45)
 LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_bold_54)
 LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_bold_90)
 
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_regular_24)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_regular_50)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_light_100)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_light_130)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_medium_10)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_medium_13)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_medium_20)
+LV_FONT_DECLARE(font_lv_demo_high_res_roboto_slab_bold_50)
+
 /**********************
  *  STATIC PROTOTYPES
  **********************/
 
 static void init_fonts_sm(lv_style_t * fonts);
+static void init_fonts_msm(lv_style_t * fonts);
 static void init_fonts_md(lv_style_t * fonts);
 static void init_fonts_lg(lv_style_t * fonts);
 static void theme_observer_cb(lv_observer_t * observer, lv_subject_t * subject);
@@ -99,6 +109,25 @@ const lv_demo_high_res_sizes_t lv_demo_high_res_sizes_all[SIZE_COUNT] = {
         .indicator_width = 94,
         .indicator_height = 85,
         .init_fonts_cb = init_fonts_sm
+    },
+    {
+        .gap = {0, 2, 4, 6, 9, 12, 14, 16, 20, 24, 32},
+        .icon = {16, 21, 32, 42, 64},
+        .card_long_edge = 265,
+        .widget_long_edge = 300,
+        .card_short_edge = 160,
+        .smart_home_arc_diameter = 140,
+        .ev_charging_arc_diameter = 200,
+        .smart_meter_collapsed_part_height = 60,
+        .slider_width = 32,
+        .small_chart_height = 80,
+        .large_chart_height = 200,
+        .card_radius = 13,
+        .settings_panel_width = 160,
+        .home_bottom_margin_height = 64,
+        .indicator_width = 100,
+        .indicator_height = 96,
+        .init_fonts_cb = init_fonts_msm
     },
     {
         .gap = {0, 3, 6, 9, 12, 16, 20, 24, 30, 36, 48},
@@ -166,11 +195,15 @@ lv_obj_t * lv_demo_high_res_base_obj_create(const char * assets_path,
     int32_t vres = lv_display_get_vertical_resolution(disp);
     bool is_exact;
     int32_t size;
-    if(hres < 1280 && vres < 720) {
+    if (hres <= 800 && vres <= 480) {
         is_exact = hres == 800 && vres == 480;
         size = SIZE_SM;
     }
-    else if(hres < 1920 && vres < 1080) {
+    else if (hres <= 1024 && vres <= 600) {
+        is_exact = hres == 1024 && vres == 600;
+        size = SIZE_MSM;
+    }
+    else if (hres <= 1280 && vres <= 720) {
         is_exact = hres == 1280 && vres == 720;
         size = SIZE_MD;
     }
@@ -261,7 +294,7 @@ lv_obj_t * lv_demo_high_res_base_obj_create(const char * assets_path,
         {"light_widget5_bg", LV_COLOR_FORMAT_ARGB8888},
         {"dark_widget5_bg", LV_COLOR_FORMAT_ARGB8888},
     };
-    const char * size_prefix = size == SIZE_SM ? "sm" : size == SIZE_MD ? "md" : "lg";
+    const char * size_prefix = (size == SIZE_SM) ? "sm" : (size == SIZE_MSM) ? "msm" : (size == SIZE_MD) ? "md" : "lg";
     for(uint32_t i = 0; i < IMG_COUNT; i++) {
         char path_buf[256];
         int chars = lv_snprintf(path_buf, sizeof(path_buf), "%s/img_lv_demo_high_res_%s_%s.png",
@@ -500,6 +533,21 @@ static void init_fonts_sm(lv_style_t * fonts)
     lv_style_set_text_font(&fonts[FONT_LABEL_LG], &font_lv_demo_high_res_roboto_slab_bold_20);
     lv_style_set_text_font(&fonts[FONT_LABEL_XL], &font_lv_demo_high_res_roboto_slab_bold_24);
     lv_style_set_text_font(&fonts[FONT_LABEL_2XL], &font_lv_demo_high_res_roboto_slab_bold_40);
+}
+
+static void init_fonts_msm(lv_style_t * fonts)
+{
+    lv_style_set_text_font(&fonts[FONT_HEADING_MD], &font_lv_demo_high_res_roboto_slab_regular_24);
+    lv_style_set_text_font(&fonts[FONT_HEADING_LG], &font_lv_demo_high_res_roboto_slab_regular_50);
+    lv_style_set_text_font(&fonts[FONT_HEADING_XL], &font_lv_demo_high_res_roboto_slab_light_100);
+    lv_style_set_text_font(&fonts[FONT_HEADING_XXL], &font_lv_demo_high_res_roboto_slab_light_130);
+    lv_style_set_text_font(&fonts[FONT_LABEL_XS], &font_lv_demo_high_res_roboto_slab_medium_10);
+    lv_style_set_text_line_space(&fonts[FONT_LABEL_XS], 30 * lv_font_get_line_height(&font_lv_demo_high_res_roboto_slab_medium_10) / 100);
+    lv_style_set_text_font(&fonts[FONT_LABEL_SM], &font_lv_demo_high_res_roboto_slab_medium_13);
+    lv_style_set_text_font(&fonts[FONT_LABEL_MD], &font_lv_demo_high_res_roboto_slab_medium_20);
+    lv_style_set_text_font(&fonts[FONT_LABEL_LG], &font_lv_demo_high_res_roboto_slab_bold_24);
+    lv_style_set_text_font(&fonts[FONT_LABEL_XL], &font_lv_demo_high_res_roboto_slab_bold_30);
+    lv_style_set_text_font(&fonts[FONT_LABEL_2XL], &font_lv_demo_high_res_roboto_slab_bold_50);
 }
 
 static void init_fonts_md(lv_style_t * fonts)

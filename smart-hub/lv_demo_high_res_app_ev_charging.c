@@ -179,8 +179,7 @@ static void anim_state_apply(anim_state_t * anim_state, int32_t v)
     lv_label_set_text_fmt(anim_state->spent_label_large, "$%"LV_PRId32, v_range_spent);
     char buf[32];
     lv_snprintf(buf, sizeof(buf), "$%"LV_PRId32" - ", v_range_spent);
-    lv_spangroup_set_span_text(anim_state->spent_spangroup_small,
-                               lv_spangroup_get_child(anim_state->spent_spangroup_small, 0), buf);
+    lv_span_set_text(lv_spangroup_get_child(anim_state->spent_spangroup_small, 0), buf);
     lv_label_set_text_fmt(anim_state->saved_label, "$%"LV_PRId32, 340 - v_range_spent);
 
     int32_t v_range_charged = lv_map(v, 0, EV_CHARGING_RANGE_END, 640, 683);
@@ -281,11 +280,11 @@ static void create_widget1(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_t * total_spent_span = lv_spangroup_create(spent_box);
     lv_obj_add_style(total_spent_span, &c->fonts[FONT_LABEL_XS], 0);
     lv_obj_add_style(total_spent_span, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_spangroup_add_span(total_spent_span);
+    lv_spangroup_new_span(total_spent_span);
     anim_state->spent_spangroup_small = total_spent_span;
-    lv_span_t * total_spent_label = lv_spangroup_add_span(total_spent_span);
+    lv_span_t * total_spent_label = lv_spangroup_new_span(total_spent_span);
     lv_span_set_text_static(total_spent_label, "Total spent");
-    lv_style_set_text_opa(&total_spent_label->style, LV_OPA_40);
+    lv_style_set_text_opa(lv_span_get_style(total_spent_label), LV_OPA_40);
 
     lv_obj_t * total_spent_bar = lv_demo_high_res_simple_container_create(spent_box, false, c->sz->gap[1],
                                                                           LV_FLEX_ALIGN_START);
@@ -311,12 +310,12 @@ static void create_widget1(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_t * gas_equivalent_span = lv_spangroup_create(spent_box);
     lv_obj_add_style(gas_equivalent_span, &c->fonts[FONT_LABEL_XS], 0);
     lv_obj_add_style(gas_equivalent_span, &c->styles[STYLE_COLOR_BASE][STYLE_TYPE_TEXT], 0);
-    lv_span_t * gas_equivalent_amount = lv_spangroup_add_span(gas_equivalent_span);
+    lv_span_t * gas_equivalent_amount = lv_spangroup_new_span(gas_equivalent_span);
     lv_span_set_text_static(gas_equivalent_amount, "$340 - ");
-    lv_span_t * gas_equivalent_label = lv_spangroup_add_span(gas_equivalent_span);
+    lv_span_t * gas_equivalent_label = lv_spangroup_new_span(gas_equivalent_span);
     lv_span_set_text_static(gas_equivalent_label, "Gas Equivalent");
-    lv_style_set_text_opa(&gas_equivalent_label->style, LV_OPA_40);
-    lv_spangroup_refresh(gas_equivalent_span);
+    lv_style_set_text_opa(lv_span_get_style(gas_equivalent_label), LV_OPA_40);
+    lv_spangroup_refr_mode(gas_equivalent_span);
 }
 
 static lv_obj_t * widget2_chart_label(lv_demo_high_res_ctx_t * c, lv_obj_t * parent, const char * text)
@@ -373,7 +372,7 @@ static void create_widget2(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_set_style_pad_all(chart, 0, 0);
     lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 0, 1);
     lv_chart_set_type(chart, LV_CHART_TYPE_BAR);
-    lv_chart_set_axis_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 96);
+    lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 96);
     lv_chart_set_div_line_count(chart, 3, 0);
     lv_obj_set_style_line_opa(chart, LV_OPA_40, 0);
     lv_obj_set_style_line_color(chart, lv_color_black(), 0);
@@ -381,7 +380,7 @@ static void create_widget2(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_set_style_line_dash_gap(chart, 1, 0);
     lv_chart_series_t * ser = lv_chart_add_series(chart, lv_color_white(), LV_CHART_AXIS_PRIMARY_Y);
     static const int32_t chart_values[] = {45, 14, 78, 95, 45, 52, 78, 34, 63, 52, 38, 83, 63, 19, LV_CHART_POINT_NONE};
-    lv_chart_set_series_ext_y_array(chart, ser, (int32_t *)chart_values);
+    lv_chart_set_ext_y_array(chart, ser, (int32_t *)chart_values);
     lv_chart_set_point_count(chart, sizeof(chart_values) / sizeof(*chart_values));
     lv_chart_refresh(chart);
 

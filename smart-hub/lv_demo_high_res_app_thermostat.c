@@ -176,7 +176,7 @@ static void create_widget1(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_set_style_pad_all(chart, 0, 0);
     lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 0, 1);
     lv_chart_set_type(chart, LV_CHART_TYPE_BAR);
-    lv_chart_set_axis_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 109);
+    lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 109);
     lv_chart_set_div_line_count(chart, 3, 0);
     lv_obj_set_style_line_opa(chart, LV_OPA_40, 0);
     lv_obj_set_style_line_color(chart, lv_color_black(), 0);
@@ -184,7 +184,7 @@ static void create_widget1(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_obj_set_style_line_dash_gap(chart, 1, 0);
     lv_chart_series_t * ser = lv_chart_add_series(chart, lv_color_white(), LV_CHART_AXIS_PRIMARY_Y);
     static const int32_t chart_values[] = {14, 95, 52, 34, 52, 83, 19};
-    lv_chart_set_series_ext_y_array(chart, ser, (int32_t *)chart_values);
+    lv_chart_set_ext_y_array(chart, ser, (int32_t *)chart_values);
     lv_chart_set_point_count(chart, sizeof(chart_values) / sizeof(*chart_values));
     lv_chart_refresh(chart);
 
@@ -505,12 +505,12 @@ static void create_widget3(lv_demo_high_res_ctx_t * c, lv_obj_t * widgets)
     lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_OUTER);
     lv_obj_set_size(scale, c->sz->card_long_edge, c->sz->card_long_edge);
     lv_obj_set_style_arc_opa(scale, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_radial_offset(scale, 12, LV_PART_ITEMS);
+    lv_obj_set_style_radius(scale, 12, LV_PART_ITEMS);
     lv_obj_set_style_line_rounded(scale, true, LV_PART_ITEMS);
     lv_obj_set_style_line_color(scale, lv_color_white(), LV_PART_ITEMS);
     lv_obj_set_style_line_width(scale, 4, LV_PART_ITEMS);
     lv_obj_set_style_length(scale, 1, LV_PART_ITEMS);
-    lv_obj_set_style_radial_offset(scale, 12, LV_PART_INDICATOR);
+    lv_obj_set_style_radius(scale, 12, LV_PART_INDICATOR);
     lv_obj_set_style_line_rounded(scale, true, LV_PART_INDICATOR);
     lv_obj_set_style_line_color(scale, lv_color_white(), LV_PART_INDICATOR);
     lv_obj_set_style_line_width(scale, 8, LV_PART_INDICATOR);
