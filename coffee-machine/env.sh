@@ -1,1 +1,1 @@
-source ../ameba-rtos/env.sh
+source ../../ameba-rtos/env.sh

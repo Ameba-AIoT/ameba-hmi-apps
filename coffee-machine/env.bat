@@ -1,1 +1,1 @@
-call ..\ameba-rtos\env.bat 
+call ..\..\ameba-rtos\env.bat
