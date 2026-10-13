@@ -21,7 +21,7 @@ ameba-hmi-apps 是面向瑞昱 Ameba 系列芯片的人机界面（HMI）演示�
 
 | 应用              | 芯片                   | 显示                                 | 亮点                                                                       |
 |:----------------- |:---------------------- |:------------------------------------ |:-------------------------------------------------------------------------- |
-| **caffee-machine**| RTL8721F| RGB                              | 咖啡机控制界面                                                                |
+| **coffee-machine**| RTL8721F| RGB                              | 咖啡机控制界面                                                                |
 | **e-bike**        | RTL8721F| RGB                               | 电动车仪表界面——车速、电量与骑行组件                                              |
 | **smart-hub**     | RTL8730E| MIPI                               | 智能家居中枢——智能家居、温控、EV 充电、智能电表、关于等多个子应用                     |
 
@@ -37,43 +37,72 @@ ameba-hmi-apps 是面向瑞昱 Ameba 系列芯片的人机界面（HMI）演示�
 
 ## 🚀 快速开始
 
-这些演示使用 ameba-rtos 工具链构建，开箱即可编译。
+下面以 **coffee-machine** 为例。编 **e-bike** 时把目录名换掉，并跳过第 2 步。
 
-**1. 把 ameba-rtos 放在演示目录同级**
+### 1. 把 ameba-rtos 放在 ameba-hmi-apps 同级
 
-克隆 [ameba-rtos](https://github.com/Ameba-AIoT/ameba-rtos)（带 submodule，这样 `component/ui`（即 ameba-ui）也会一并拉取），并与演示文件夹放在**同一级目录**：
+在同一个工作目录下克隆两个仓库。ameba-rtos 要带 submodule（`component/ui` 就是 ameba-ui，必需）：
 
 ```bash
+git clone https://github.com/Ameba-AIoT/ameba-hmi-apps.git
 git clone --recurse-submodules https://github.com/Ameba-AIoT/ameba-rtos.git
 ```
 
 ```text
 <workspace>/
-├── ameba-rtos/
-└── ameba-hmi-apps/caffee-machine/   # （或 e-bike）
+├── ameba-rtos/              # SDK
+└── ameba-hmi-apps/
+    ├── coffee-machine/      # 应用（外部工程）
+    ├── e-bike/              # 应用（外部工程）
+    └── smart-hub/
 ```
 
-**2. 启用所需的 LVGL 字体**
+应用目录里的 `env.sh` / `env.bat` 只有一行，作用是加载 ameba-rtos 里的 `env.sh` / `env.bat`，默认路径是 `../../ameba-rtos/env.sh` / `..\..\ameba-rtos\env.bat`，对应上面的目录结构。ameba-rtos 放在其他位置也可以，把这一行改成指向你的 `ameba-rtos/env.sh` / `ameba-rtos\env.bat` 即可。
 
-例如 `caffee-machine` 需要在
-`component/ui/LVGL/lvgl-9.3/port/amebagreen2/lv_conf.h` 中启用 `LV_FONT_MONTSERRAT_46`：
+### 2. 打开 LVGL 字体（仅 coffee-machine）
+
+coffee-machine 用到 Montserrat 46 号字体，默认是关的。修改
+`<workspace>/ameba-rtos/component/ui/LVGL/config/amebagreen2/lv_conf.h`：
 
 ```c
 #define LV_FONT_MONTSERRAT_46 1
 ```
 
-**3. 编译**
+e-bike 不需要这一步。
 
-在演示文件夹内执行：
+### 3. 编译
+
+所有命令都在应用目录里、**同一个终端**中执行（`ameba.py` 命令由 `env.sh` / `env.bat` 设置，只对当前终端有效）：
 
 ```bash
-source env.sh && ameba.py build   # Linux
-env.bat && ameba.py build         # Windows
+cd ameba-hmi-apps/coffee-machine
+source env.sh                 # Linux / macOS
+# env.bat                     # Windows
+ameba.py soc RTL8721F         # 选择芯片，只需执行一次
+ameba.py build
 ```
 
-**4. 烧录**
+最后输出 `Build done` 即编译成功。镜像生成在应用目录下：
 
-用 **Ameba Image Tool** 把固件与图片资源下载到板子。
+```text
+coffee-machine/build_RTL8721F/
+├── boot.bin
+├── app.bin
+└── ota_all.bin
+```
+
+### 4. 烧录并运行
+
+用 **Ameba Image Tool** 烧录 `boot.bin` 和 `app.bin`，或者在同一个终端里执行：
+
+```bash
+ameba.py flash -p <PORT>              # 烧录 build_RTL8721F/ 下的镜像
+ameba.py monitor -p <PORT> -b 1500000 # 打开串口日志
+```
+
+复位后，屏幕上会显示应用界面。
+
+> 这些演示没有开启触摸输入。
 
 ## 💬 反馈
 

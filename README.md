@@ -21,7 +21,7 @@ ameba-hmi-apps is a collection of ready-to-run Human-Machine Interface (HMI) dem
 
 | App               | Chip                   | Display | Highlights                                                                          |
 |:----------------- |:---------------------- |:------- |:----------------------------------------------------------------------------------- |
-| **caffee-machine**| RTL8721F | RGB     | Coffee-machine control UI                                                           |
+| **coffee-machine**| RTL8721F | RGB     | Coffee-machine control UI                                                           |
 | **e-bike**        | RTL8721F | RGB     | E-bike dashboard UI — speed, battery and ride widgets                               |
 | **smart-hub**     | RTL8730E| MIPI    | Smart-home hub — smart home, thermostat, EV charging, smart meter, about and more   |
 
@@ -36,43 +36,72 @@ ameba-hmi-apps is a collection of ready-to-run Human-Machine Interface (HMI) dem
 
 ## 🚀 Quick Start
 
-These demos are built with the ameba-rtos toolchain and are ready to build out of the box.
+The steps below use **coffee-machine** as the example. For **e-bike**, replace the folder name and skip step 2.
 
-**1. Place ameba-rtos next to the demo**
+### 1. Place ameba-rtos next to ameba-hmi-apps
 
-Clone [ameba-rtos](https://github.com/Ameba-AIoT/ameba-rtos) (with submodules, so `component/ui` / ameba-ui is included) at the **same directory level** as the demo folder:
+Clone both repositories into the same workspace folder. Clone ameba-rtos with submodules (`component/ui` is the ameba-ui submodule and is required):
 
 ```bash
+git clone https://github.com/Ameba-AIoT/ameba-hmi-apps.git
 git clone --recurse-submodules https://github.com/Ameba-AIoT/ameba-rtos.git
 ```
 
 ```text
 <workspace>/
-├── ameba-rtos/
-└── ameba-hmi-apps/caffee-machine/   # (or e-bike)
+├── ameba-rtos/              # SDK
+└── ameba-hmi-apps/
+    ├── coffee-machine/      # app (external project)
+    ├── e-bike/              # app (external project)
+    └── smart-hub/
 ```
 
-**2. Enable any required LVGL fonts**
+The `env.sh` / `env.bat` in each app folder is a single line that loads `env.sh` / `env.bat` from ameba-rtos. By default it points to `../../ameba-rtos/env.sh` / `..\..\ameba-rtos\env.bat`, which matches the layout above. ameba-rtos can be placed anywhere else; just change that line to point to your `ameba-rtos/env.sh` / `ameba-rtos\env.bat`.
 
-For example, `caffee-machine` needs `LV_FONT_MONTSERRAT_46` enabled in
-`component/ui/LVGL/lvgl-9.3/port/amebagreen2/lv_conf.h`:
+### 2. Enable the LVGL font (coffee-machine only)
+
+coffee-machine uses the Montserrat 46 font, which is disabled by default. Edit
+`<workspace>/ameba-rtos/component/ui/LVGL/config/amebagreen2/lv_conf.h`:
 
 ```c
 #define LV_FONT_MONTSERRAT_46 1
 ```
 
-**3. Build**
+e-bike does not need this step.
 
-From inside the demo folder:
+### 3. Build
+
+Run all commands from inside the app folder, in the **same terminal** (the `ameba.py` command is set up by `env.sh` / `env.bat` for the current terminal only):
 
 ```bash
-source env.sh && ameba.py build   # Linux
-env.bat && ameba.py build         # Windows
+cd ameba-hmi-apps/coffee-machine
+source env.sh                 # Linux / macOS
+# env.bat                     # Windows
+ameba.py soc RTL8721F         # select the chip, only needed once
+ameba.py build
 ```
 
-**4. Flash**
+The build ends with `Build done`. The images are generated in the app folder:
 
-Download the firmware and image assets to the board with the **Ameba Image Tool**.
+```text
+coffee-machine/build_RTL8721F/
+├── boot.bin
+├── app.bin
+└── ota_all.bin
+```
+
+### 4. Flash and run
+
+Flash `boot.bin` and `app.bin` with the **Ameba Image Tool**, or from the same terminal:
+
+```bash
+ameba.py flash -p <PORT>              # flashes the images in build_RTL8721F/
+ameba.py monitor -p <PORT> -b 1500000 # open the serial log
+```
+
+After reset, the panel shows the app UI.
+
+> Touch input is not enabled in these demos.
 
 ## 💬 Feedback
 
