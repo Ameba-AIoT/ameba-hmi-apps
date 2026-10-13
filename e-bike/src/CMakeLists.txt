@@ -85,6 +85,12 @@ ameba_list_append(private_compile_options
     -Wno-unused-parameter
 )
 
+# lv_port.h: LVGL/platform in current ameba-ui, LVGL/lvgl-9.3/platform in older revisions
+ameba_list_append(private_includes
+    ${c_COMPONENT_DIR}/ui/LVGL/platform
+    ${c_COMPONENT_DIR}/ui/LVGL/lvgl-9.3/platform
+)
+
 ameba_add_internal_library(ebike
     p_SOURCES
         ${private_sources}
