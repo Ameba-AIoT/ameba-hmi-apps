@@ -105,5 +105,5 @@ After reset, the panel shows the app UI.
 
 ## 💬 Feedback
 
-* For questions or suggestions during development, visit the [Real-AIOT Forum](https://forum.real-aiot.com/).
+* For questions or suggestions during development, visit the [Ameba AIoT Forum](https://forum.amebaiot.com/).
 * For bugs or feature requests, [check the GitHub Issues](https://github.com/Ameba-AIoT/ameba-hmi-apps/issues). Please check existing issues before opening a new one.
